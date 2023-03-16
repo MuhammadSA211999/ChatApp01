@@ -1,7 +1,30 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logoImage from "../assets/images/lws-logo-light.svg";
+import { useRegiterMutation } from "../features/auth/authApi";
 
 export default function Register() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [agreed, setAgreed] = useState(false)
+    const [error, setError] = useState(undefined)
+
+    const [register, { data, error: resError, isLoading }] = useRegiterMutation()
+    const userData = { name, email, password }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setError('')
+        if (password !== confirmPassword) {
+            setError('Password does not match')
+
+        }
+        else {
+            register(userData)
+        }
+
+    }
     return (
         <div className="grid place-items-center h-screen bg-[#F9FAFB">
             <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -18,7 +41,8 @@ export default function Register() {
                             Create your account
                         </h2>
                     </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form onSubmit={handleSubmit}
+                        className="mt-8 space-y-6" method="POST">
                         <input type="hidden" name="remember" value="true" />
                         <div className="rounded-md shadow-sm -space-y-px">
                             <div>
@@ -26,6 +50,8 @@ export default function Register() {
                                     Full Name
                                 </label>
                                 <input
+                                    onChange={(e) => setName(e.target.value)}
+                                    value={name}
                                     id="name"
                                     name="Name"
                                     type="Name"
@@ -44,6 +70,8 @@ export default function Register() {
                                     Email address
                                 </label>
                                 <input
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
                                     id="email-address"
                                     name="email"
                                     type="email"
@@ -59,6 +87,8 @@ export default function Register() {
                                     Password
                                 </label>
                                 <input
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={password}
                                     id="password"
                                     name="password"
                                     type="password"
@@ -77,6 +107,8 @@ export default function Register() {
                                     Confirm Password
                                 </label>
                                 <input
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    value={confirmPassword}
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     type="confirmPassword"
@@ -91,8 +123,11 @@ export default function Register() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <input
+                                    onChange={(e) => setAgreed(e.target.checked)}
+                                    checked={agreed}
                                     id="remember-me"
                                     name="remember-me"
+                                    required
                                     type="checkbox"
                                     className="h-4 w-4 text-violet-600 focus:ring-violet-500 border-gray-300 rounded"
                                 />
@@ -106,7 +141,7 @@ export default function Register() {
                         </div>
 
                         <div>
-                            <button
+                            <button disabled={!agreed}
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
                             >
