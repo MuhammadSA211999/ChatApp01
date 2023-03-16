@@ -41,7 +41,7 @@ export const authApi = apiSlice.injectEndpoints({
                         user: result?.data?.user
                     })
                     )
-                    dispatch(userLoggin({ accessToken: result.data.accessToken, user: result?.data?.user }))
+                    dispatch(userRegister({ accessToken: result.data.accessToken, user: result?.data?.user }))
                 }
                 catch (error) {
                     console.log('error in register endpoints', error);
@@ -52,4 +52,4 @@ export const authApi = apiSlice.injectEndpoints({
         })
     })
 })
-export const { useRegiterMutation, useLogginMutation } = authApi
+export const { useRegisterMutation, useLogginMutation } = authApi

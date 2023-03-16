@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logoImage from "../assets/images/lws-logo-light.svg";
-import { useRegiterMutation } from "../features/auth/authApi";
+import { useRegisterMutation } from "../features/auth/authApi";
 
 export default function Register() {
     const [name, setName] = useState('')
@@ -10,9 +10,27 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [agreed, setAgreed] = useState(false)
     const [error, setError] = useState(undefined)
-
-    const [register, { data, error: resError, isLoading }] = useRegiterMutation()
     const userData = { name, email, password }
+    const navigate = useNavigate()
+    const [register, { data, error: resError, isLoading }] = useRegisterMutation()
+
+    // data erro submit korar sathe sathe pawaya zay na,
+    // console.log('data in Register page', data);
+    // console.log('error in Register page', resError);
+
+    // data and resError payar jonno useEffect use korte hobe, and data pele user ke ./inbox page e navigate kore dite hobe
+    useEffect(() => {
+        // console.log('data in Register page', data);
+        console.log('error in Register page', resError);
+        if (!resError?.data && data?.user?.email) {
+            navigate('/inbox')
+        }
+        if (resError?.data) {
+            setError(resError?.data)
+        }
+    }, [data, resError, navigate])
+
+
     const handleSubmit = (e) => {
         e.preventDefault()
         setError('')
@@ -111,12 +129,13 @@ export default function Register() {
                                     value={confirmPassword}
                                     id="confirmPassword"
                                     name="confirmPassword"
-                                    type="confirmPassword"
+                                    type="password"
                                     autoComplete="current-confirmPassword"
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                                     placeholder="confirmPassword"
                                 />
+                                {error && <p className="text-red-500">{error}</p>}
                             </div>
                         </div>
 
@@ -140,8 +159,8 @@ export default function Register() {
                             </div>
                         </div>
 
-                        <div>
-                            <button disabled={!agreed}
+                        <div >
+                            <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
                             >

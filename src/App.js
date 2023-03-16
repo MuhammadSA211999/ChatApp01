@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useCheckAuthentication } from "./hooks/checkAuth";
 import Conversation from "./pages/Conversation";
 import Inbox from "./pages/Inbox";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 function App() {
-    return (
+    const authChecked = useCheckAuthentication()
+    return !authChecked ? (<div>checking authentication.....</div>) : (
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
