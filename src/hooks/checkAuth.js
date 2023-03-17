@@ -13,6 +13,7 @@ export const useCheckAuthentication = () => {
                 dispatch(userRegister({ accessToken: auth.accessToken, user: auth?.user }))
             }
         }
+
         setCheckedAuth(true)
     }, [dispatch])
     return checkedAuth
