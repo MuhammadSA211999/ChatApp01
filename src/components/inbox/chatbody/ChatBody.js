@@ -21,10 +21,7 @@ export default function ChatBody() {
         content = <div>Start a conversation</div>
     }
     else if (!isLoading && !isError && messages.length > 0) {
-        content = <><ChatHead
-            avatar=''
-            name=''
-        />
+        content = <><ChatHead message={messages[0]} />
             <Messages messages={messages} />
             <Options /></>
 
